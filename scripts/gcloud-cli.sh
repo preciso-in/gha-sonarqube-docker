@@ -52,13 +52,13 @@ set -e
 
 # TODO: Check if node, npm and gcloud are installed
 
-source ./CLI_Scripts/utils.sh
-source ./CLI_Scripts/config.sh
+source ./modules/utils.sh
+source ./modules/config.sh
 
 source ./getInputs/process-arguments.sh
 handle_arguments $@
 
-source ./CLI_Scripts/working/input-variables.sh
+source ./modules/working/input-variables.sh
 
 # Read default values
 source ./default-values.sh
@@ -78,7 +78,7 @@ echo "PROJECT_ID: $PROJECT_ID"
 echo "REGION: $REGION"
 echo "BUCKET_ID: $BUCKET_ID"
 
-source ./CLI_Scripts/check-gcp-login.sh
+source ./modules/check-gcp-login.sh
 
 active_account=$(check_active_account)
 
@@ -92,35 +92,35 @@ fi
 
 get_billing_account
 
-source ./CLI_Scripts/check-available-projects-quota.sh
+source ./modules/check-available-projects-quota.sh
 check_available_projects_quota
 
-source ./CLI_Scripts/create-project.sh
+source ./modules/create-project.sh
 create_project
 
-source ./CLI_Scripts/enable-compute-api.sh
+source ./modules/enable-compute-api.sh
 enable_compute_api
 
-source ./CLI_Scripts/update-gcloud-config.sh
+source ./modules/update-gcloud-config.sh
 update_gcloud_config
 
-source ./CLI_Scripts/get-service-account.sh
+source ./modules/get-service-account.sh
 get_service_account
 
-source ./CLI_Scripts/delete-default-firewall-rules.sh
+source ./modules/delete-default-firewall-rules.sh
 delete_default_firewall_rules
 
-source ./CLI_Scripts/delete-default-network.sh
+source ./modules/delete-default-network.sh
 delete_default_network
 
-source ./CLI_Scripts/create-vpc-network.sh
+source ./modules/create-vpc-network.sh
 create_vpc_network
 
-source ./CLI_Scripts/create-sub-network.sh
+source ./modules/create-sub-network.sh
 create_sub_network
 
-source ./CLI_Scripts/create-firewall-rules.sh
+source ./modules/create-firewall-rules.sh
 create_firewall_rules
 
-source ./CLI_Scripts/create-instances.sh
+source ./modules/create-instances.sh
 create_instances
