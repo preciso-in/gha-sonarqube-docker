@@ -14,7 +14,7 @@ data "terraform_remote_state" "remote" {
 }
 
 provider "google" {
-  project = data.terraform_remote_state.remote.outputs.poc_project_id
+  project = var.project_id
   region  = var.region
 }
 

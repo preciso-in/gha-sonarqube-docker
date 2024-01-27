@@ -1,3 +1,13 @@
+variable "project_id" {
+  type        = string
+  description = "Project ID to be set by running gcloud command in Shell"
+}
+
+variable "bucket_id" {
+  type        = string
+  description = "ID of bucket to store startup scripts, terraform state"
+}
+
 resource "random_id" "random" {
   byte_length = 4
 }

@@ -50,7 +50,7 @@ resource "google_service_account" "default" {
 }
 
 resource "google_project_iam_member" "storage_iam_binding" {
-  project = data.terraform_remote_state.remote.outputs.poc_project_id
+  project = var.project_id
   role    = "roles/storage.objectViewer"
   member  = "serviceAccount:${google_service_account.default.email}"
 }
