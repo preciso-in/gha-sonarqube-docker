@@ -4,14 +4,14 @@ create_project() {
 
 	print_yellow "\nCreating project: $PROJECT_ID"
 
-	if gcloud projects describe $PROJECT_ID >/dev/null 2>&1; then
+	if gcloud projects describe $PROJECT_ID &>/dev/null; then
 		print_green "Project $PROJECT_ID already exists."
 
 		link_billing_account
 		return
 	fi
 
-	gcloud projects create $PROJECT_ID || {
+	gcloud projects create $PROJECT_ID &>/dev/null || {
 		print_red "Error creating project: $PROJECT_ID"
 		exit 1 # Terminate the script with an error
 	}

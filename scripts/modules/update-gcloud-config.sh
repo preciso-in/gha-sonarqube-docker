@@ -3,9 +3,11 @@ update_gcloud_config() {
 	gcloud config set compute/region $REGION --quiet &>/dev/null
 	gcloud config set project $PROJECT_ID --quiet &>/dev/null
 	gcloud config set compute/zone $REGION-a --quiet &>/dev/null
+	gcloud config set component_manager/disable_update_check true --quiet &>/dev/null
 
 	print_green "Gcloud Config is set to:"
 
 	gcloud config list
 	print_green ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"
 }
+ 

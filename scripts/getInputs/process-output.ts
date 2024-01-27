@@ -40,7 +40,7 @@ ${project_idLine}
 ${regionLine}
 ${defaultsLine}`;
 
-  const filePath = "./modules/working/input-variables.sh";
+  const filePath = "./working/input-variables.sh";
   try {
     await createFile(filePath);
     await fs.promises.writeFile(filePath, output);

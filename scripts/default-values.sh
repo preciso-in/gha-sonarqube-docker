@@ -1,3 +1,5 @@
-export PROJECT_ID=a-very-rand-om-project1
+project_name=jsd-with-terraform
+
+export PROJECT_ID=$project_name
 export REGION=us-central1
-export BUCKET_ID=a-very-rand-om-project1-sb
+export BUCKET_ID="$project_name-bucket"

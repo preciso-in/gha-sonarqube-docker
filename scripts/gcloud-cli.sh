@@ -58,6 +58,8 @@ source ./modules/config.sh
 source ./getInputs/process-arguments.sh
 handle_arguments $@
 
+pwd
+read -p "Press Enter key to continue..."
 source ./modules/working/input-variables.sh
 
 # Read default values
