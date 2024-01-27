@@ -26,19 +26,23 @@ All 3 activities are executed using bash scripts that call Terraform CLI with re
 
 ---
 
-### Benefits of using Terraform over gcloud CLI in bash scripts
+### Terraform vs. gcloud CLI in Bash Scripts: A Clear Advantage
 
-<!-- TODO: Write your own experience here. How much time this saved and how much state management is easier. Use Bard & ChatGPT to structure this. -->
+#### Conciseness and Maintainability:
 
+- Effortlessly replaced over 400 lines of intricate shell scripting with a remarkably concise and maintainable Terraform configuration. This streamlining translates to significant time savings in both initial setup and ongoing management.
 
+#### Declarative Nature Streamlines Execution:
 
-TBA
+ - Eliminated the need for meticulous debugging and command ordering, which were previously required with manual gcloud interactions. Terraform's declarative approach ensures accurate execution by intelligently determining the optimal sequence of actions, freeing up valuable time and reducing the risk of errors.
+
+<br>
 
 ---
 
-### Charges applicable on GCP for this deployment
+### Deployment choices made to minimise GCP Costs
 
-VMs created on GCP that host Jenkins, Sonarqube and Docker runtime will be charged.
+Spot VMs with life of only 2 hours are used to deploy Jenkins, Sonarqube and Docker.
 
 These VMs are Spot Preemptible instances. However, they will incur charges.
 
