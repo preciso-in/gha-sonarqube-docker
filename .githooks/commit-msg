@@ -3,7 +3,7 @@
 commit_message_file="$1"
 commit_message=$(cat "$commit_message_file")
 
-if [[ ! $commit_message =~ ^JSD ]]; then
+if [[ ! $commit_message =~ ^JSDT ]]; then
 	echo "Commit message must start with StoryID ie. 'JSDTxxx'"
 	exit 1
 fi
