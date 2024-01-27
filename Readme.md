@@ -1,49 +1,48 @@
 # Site Deployment on GCP using Jenkins CI/CD
 
-This project demonstrates use of Jenkins to deploy docker container of a Simple Website to Google Cloud Platform after scanning with Sonarqube.
+### Terraform IaC configuration to deploy GCP resources
 
-### Using Gcloud CLI to deploy GCP resources
+### Jenkins for CI/CD,
 
-<details>
-<summary>
-What: Using GCloud CLI, the script achieves the following objectives:</summary>
+### Sonarqube for Quality Scanning before Docker deploys website.
 
-- Creates Spot VMs that expire in 4 Hours using an instance template
-- Created VMs run Jenkins, Sonarqube & Docker Container for Nginx
-- Clears default VPC, subnet and creates custom VPC & subnet
-- Creates firewall rules required for VMs to communicate with each other.
-- VMs are fully configured with Jenkins, Sonarqube & Docker. To achieve this, metadata startup scripts are uploaded in Storage bucket to be used when VMs are created
+---
 
-</details>
-<br>
+#### Setup, Deployment & Cleanup
 
-How to run: Run ./scripts/gcloud-cli.sh to create GCP resources required to deploy this app.
+Instructions folder contain instructions to Setup, Deploy and Cleanup Resources used in this project.
 
-Then follow the instructions provided in ./Instructions/CLI-Instructions.md to complete setup of Jenkins, Sonarqube & Docker servers.
+All 3 activities are executed using bash scripts that call Terraform CLI with required inputs.
 
-### Use Terraform IaC configuration to deploy GCP resources
+---
 
-Use Instructions from ./Instructions/TF-Instructions.md to deploy the site using Terraform
+### Best Practices Used:
 
-### Miscellaneous
+- IAC (Terraform) used to create GCP resources.
+- GCP VM instances are preconfigured with Jenkins, Sonarqube and Docker using Startup scripts hosted in GCP Cloud Storage
+- Individual scripts to Create, Destroy and Update limit user interaction to supplying Project_ID and bucket_id and region.
+- Git Commits are required to map to a story-id.
+- GCP VMs are created on pre-emptible spot instances to keep GCP billing charges to a minimum.
 
-##### Provide Defaults in ./default-values.txt if you do not want to provide input flags.
+---
 
-```
-Inputs requested are
- - Project ID (Unique)
- - Bucket ID (Unique)
- - Region.
+### Benefits of using Terraform over gcloud CLI in bash scripts
 
-Order of precedence:
-	1. Flags provided to CLI
-	2. Defaults
+<!-- TODO: Write your own experience here. How much time this saved and how much state management is easier. Use Bard & ChatGPT to structure this. -->
 
-```
 
-##### Force Git commit messages to include Story ID using githooks
 
-```
-$ chmod +x enforce-story-id.sh
-$ sh enforce-story-id.sh
-```
+TBA
+
+---
+
+### Charges applicable on GCP for this deployment
+
+VMs created on GCP that host Jenkins, Sonarqube and Docker runtime will be charged.
+
+These VMs are Spot Preemptible instances. However, they will incur charges.
+
+Rest of the resources created like startup scripts stored on GCP are negligible in cost. Hence, you can keep them.
+
+However, project created will be counted against your Projects quota and billing quota.
+Hence, it is advisable to delete these when no longer required using instructions listed in ./instructions/cleanup-instructions.md

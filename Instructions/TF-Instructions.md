@@ -1,146 +1,75 @@
-<details>
-<summary>Authentication on local workstation to run TF script</summary>
+# Instructions to deploy a simple website on GCP with Jenkins and Terraform
 
-##### Authenticate to GCP for Terraform Access
+---
 
-```
-gcloud auth application-default login
-```
+Please refer to ./setup-instructions.md for instructions on
 
-</details>
- <br>
+- Authenticating into GCP.
+- Providing defaults for the script.
+- Information on flags required by script
 
-<details>
-<summary>Environment Variables</summary>
+---
 
-##### Set Environment Variables
+Switch to ./scripts folder on your terminal and follow instructions below.
+You can update default values by changing default values listed in ./scripts/default-values.sh
 
 ```
-REGION=us-central1
-PROJECT_ID=jenkins-sonarqube-docker-2509
-NETWORK_NAME=jsd-nw
-SUBNET_NAME=jsd-subnet
-STORAGE_BUCKET_NAME=startup-script-bucket-1e
-INSTANCE_TEMPLATE_NAME=jsd-instance-template
-JENKINS_INSTANCE_NAME=ci-server
-DOCKER_INSTANCE_NAME=container-server
-SONARQUBE_INSTANCE_NAME=code-scanner-server
-JENKINS_NETWORK_TAG=ci-server
-SONARQUBE_NETWORK_TAG=scanner-server
-DOCKER_NETWORK_TAG=container-server
+> cd scripts
+> chmod +x tf-create.sh
+> export PATH=$PATH:${pwd}
+> tf-create.sh
+> source ./working/created-resource-names.sh
 ```
 
-</details>
-<br/>
+On completion of above instructions, 3 servers hosting Jenkins, Sonarqube and Docker will be created on GCP Compute Engine.
 
-<details>
-<summary>Housekeeping (Updates, cleanup)</summary>
+---
 
-##### Miscellaneous Housekeeping
+<details >
+<summary>Open Jenkins Server</summary>
 
-> Update gcloud components
+##### Check if Jenkins is running
 
-```
-sudo gcloud components update -y
-```
-
-> Gcloud setup
-> Reinitialise with a completely new configuration.
+> Login to Jenkins server and check service status
 
 ```
-gcloud init
+> gcloud compute ssh $(terraform output -raw jenkins-server-name)
+ci-server:~$ systemctl status jenkins
 ```
 
-> Terraform destroy
+##### Check if Jenkins is running
 
 ```
-terraform destroy -auto-approve
+ci-server:~$ exit
+```
+
+##### Open Jenkins URL in Browser
+
+```
+> terraform output -raw jenkins-url
 ```
 
 </details>
-<br>
 
-<details>
-<summary>Terraform</summary>
+---
 
-##### Terraform setup
+<details >
+<summary>Jenkins Server Setup</summary>
 
-> Setup TF:
-> Use terraform backend bucket from admin-tf "poc-tfstate-bucket-xxxxx" and paste it in the terraform _resource_ block.
+##### Get Jenkins Initial Admin Password
 
 ```
-terraform init
-terraform fmt
-terraform validate
+> gcloud compute ssh $(terraform output -raw jenkins-server-name)
+ci-server:~$ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 ```
 
-> Apply TF configuration
+##### Initial default plugins
 
-```
-terraform apply -auto-approve
-```
-
-##### Add Git Hook for checking Story-ID in every commit message
-
-```
-$ chmod +x script.sh
-$ sh script.sh
-```
-
-</details>
-<br>
-
-<details>
-<summary>Get IP Addresses</summary>
-
-```
-JENKINS_IP=$(gcloud compute instances describe $JENKINS_INSTANCE_NAME \
- --format="value(networkInterfaces.accessConfigs[0].natIP)")
-
-SONARQUBE_IP=$(gcloud compute instances describe $SONARQUBE_INSTANCE_NAME \
- --format="value(networkInterfaces.accessConfigs[0].natIP)")
-
-DOCKER_IP=$(gcloud compute instances describe $DOCKER_INSTANCE_NAME \
- --format="value(networkInterfaces.accessConfigs[0].natIP)")
-```
-
-</details>
-<br>
-
-<details>
-<summary>Jenkins Check</summary>
-
-> Loginto Jenkins server and check service status
-
-```
-gcloud compute ssh ci-server
-systemctl status jenkins
-```
-
-> Open Jenkins URL in browser
-
-```
-echo $JENKINS_IP:8080
-```
-
-</details>
-<br>
-
-<details>
-<summary>Setup Jenkins Server</summary>
-
-#### Get Jenkins InitialAdminPassword
-
-```
-gcloud compute ssh ci-server
-sudo cat /var/lib/jenkins/secrets/initialAdminPassword
-exit
-```
+> Browse to Jenkins IP Address
+> Input Jenkins InitialAdminPassword
+> Install Default plugins.
 
 ##### Create Jenkins User
-
-> Go to $JENKINS_IP:8080
-> Input Jenkins InitialAdminPassword
 
 ```
 user: Nilesh
@@ -158,61 +87,43 @@ https://github.com/nparkhe83/jenkins-sonarqube-docker.git
 > Add branch specifier as "\*/main"
 > Check "GitHub hook trigger for GITScm polling" in Build Trigger
 
-</details>
-<br>
-
-<details>
-<summary>Github Webhook Setup</summary>
+##### Create Webhooks in Github
 
 > Copy Jenkins Server URL into Payload URL
 
 ```
-echo http://$JENKINS_IP:8080/github-webhook/
+terraform output -raw jenkins-webhook-url
 ```
 
-> Select "Pushes" and "Pull Requests" in "Which events would you like to trigger this webhook?" > "Let me select individual events."
+> In "Which events would you like to trigger this webhook?" > "Let me select individual events." > Select "Pushes" and "Pull Requests"
 
 </details>
-<br>
 
-<details>
-<summary>SonarQube setup in Jenkins</summary>
+---
 
-##### Sonarqube setup in Jenkins
+<details >
 
-> Install plugins
-
-```
-Sonarqube Scanner
-SSH2 Easy
-```
-
-##### Configure Tools in Jenkins
-
-> Jenkins Dashboard > Manage Jenkins > Tools > SonarQube Scanner Installations > "Add Sonarqube Scanner"
-
-```
-Name: SonarScanner
-Check "Install Automatically"
-```
-
-</details>
-<br>
-
-<details>
-<summary>Sonarqube Server setup</summary>
+<summary>Start SonarQube server</summary>
 
 ##### Run Sonarqube on Sonarqube Server
 
 ```
-cd /usr/local/sonarqube-10.2.0.77647/bin/linux-x86-64/
-./sonar.sh console
+> gcloud compute ssh $(terraform output -raw sonarqube-server-name)
+scanner-server:~$ cd /usr/local/sonarqube-10.2.0.77647/bin/linux-x86-64/
+scanner-server:~$ ./sonar.sh console
 ```
+
+</details>
+
+---
+
+<details >
+<summary>Open SonarQube Server</summary>
 
 ##### Open SonarQube Server in Browser
 
 ```
-echo $SONARQUBE_IP:9000
+> terraform output -raw sonarqube-url
 ```
 
 > user: admin
@@ -265,10 +176,29 @@ Expires in: 30 days
 ```
 
 </details>
-<br>
 
-<details>
-<summary>Sonarqube setup continued on Jenkins</summary>
+---
+
+<details >
+<summary>SonarQube integration in Jenkins Server</summary>
+
+##### Install Jenkins Plugins
+
+> Install
+
+```
+Sonarqube Scanner
+SSH2 Easy
+```
+
+##### Configure Tools in Jenkins
+
+> Jenkins Dashboard > Manage Jenkins > Tools > SonarQube Scanner Installations > "Add Sonarqube Scanner"
+
+```
+Name: SonarScanner
+Check "Install Automatically"
+```
 
 ##### Configure System in Jenkins
 
@@ -276,7 +206,7 @@ Expires in: 30 days
 
 ```
 Name: Sonar-server
-Server URL: $ echo http://$SONARQUBE_IP:9000
+Server URL: > terraform output -raw sonarqube-url
 ```
 
 > In same section, add Sonarqube token
@@ -304,46 +234,114 @@ Analysis Properties: sonar.projectKey=Onix-Website-Scan
 > Dashboard > [JOB_NAME] > "Build Now"
 
 </details>
-<br>
 
-<details>
-<summary>Docker Server Setup</summary>
+---
 
-##### Docker server setup
+<details >
+<summary>Docker Server Startup</summary>
 
-> Loginto docker server
+##### Run Docker
 
-```
-docker compute ssh container-server
-```
-
-> Set password for user ubuntu
+> Check if Docker is running
 
 ```
-sudo passwd ubuntu
+> gcloud compute ssh $(terraform output -raw docker-server-name)
+container-server:~$ sudo docker run hello-world
 ```
 
-</details>
-<br>
-
-<details>
-<summary>SSH access to Docker server from Jenkins server </summary>
-
-##### Setup access in Jenkins server for Docker
-
-> Add authorised ssh key for ubuntu user on Docker server
+> Create password for Ubuntu user
 
 ```
-ssh-keygen
-
-ssh-copy-id ubuntu@$DOCKER_IP
+container-server:~$ sudo passwd ubuntu
+12345
 ```
 
 </details>
-<br>
+
+---
 
 <details>
-<summary>Jenkins build stage for Docker</summary>
+<summary>Get access to Docker Server from Jenkins Server</summary>
+
+##### Create SSH Access into Docker-Server on Jenkins server.
+
+> Get Docker IP
+
+```
+> DOCKER_IP=$(terraform output -raw docker-server-ip)
+```
+
+> Switch to jenkins user on jenkins server
+
+```
+> gcloud compute ssh $(terraform output -raw jenkins-server-name)
+ci-server:~$ sudo su jenkins
+jenkins@ci-server:~$ ssh ubuntu@DOCKER_IP
+```
+
+> Add public key of Jenkins in Docker if not already done.
+
+```
+> gcloud compute ssh $(terraform output -raw docker-server-name)
+jenkins:~$ sudo su // Switch to root user
+root:~# vim /etc/ssh/sshd_config
+```
+
+> Edit sshd_config file
+
+```
+Uncomment PubkeyAuthentication yes
+PasswordAuthentication yes
+```
+
+> Restart sshd service
+
+```
+root:~# systemctl restart sshd
+```
+
+> Try SSH again from jenkins server to ssh
+
+```
+jenkins@ci-server:~$ ssh ubuntu@$DOCKER_IP
+// ssh contains IP address encoding. Hence, everytime, the IP address changes, you have to recreate the SSH key and paste it in the Jenkins config.
+```
+
+> Create a public and private key in Jenkins server
+
+```
+jenkins@ci-server:~$ ssh-keygen
+```
+
+> Add key to jenkins-server (To avoid typing password again)
+
+```
+jenkins@ci-server:~$ ssh-copy-id ubuntu@$DOCKER_IP
+```
+
+> Log into the Docker server and create a folder to save nginx site assets
+
+```
+jenkins@ci-server:~$ ssh ubuntu@DOCKER_IP
+container-server:~$ mkdir website
+```
+
+> Grant ubuntu user access to run docker commands
+
+```
+container-server:~$ sudo usermod -aG docker ubuntu
+container-server:~$ newgrp docker
+container-server:~$ docker ps // This should run now.
+```
+
+</details>
+
+---
+
+<details >
+<summary>Integrate Docker build step in Jenkins</summary>
+
+##### Create Docker build step in Jenkins
 
 > Dashboard > Manage Jenkins > System > Server groups > Server Group List
 
@@ -379,28 +377,16 @@ docker run -d -p 8085:80 --name=Onix-Website mywebsite
 ```
 
 </details>
-<br>
 
-<details>
-<summary>Check Deployed website</summary>
+---
 
-> Open following link in browser
+<details >
+<summary>Check Website </summary>
 
-```
-echo $DOCKER_IP:8085
-```
-
-</details>
-<br>
-
-<details>
-<summary>Clean up</summary>
-
-##### Destroy Project
+##### Go to Docker IP to check website
 
 ```
-terraform destroy -auto-approve
+> terraform output docker-url
 ```
 
 </details>
-<br>

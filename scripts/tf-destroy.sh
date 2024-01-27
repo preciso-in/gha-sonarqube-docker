@@ -52,8 +52,6 @@ set -e
 # Print command before executing
 # set -x
 
-#TODO: Simple script that checks if TF is installed, gcloud is authorized and then destroys the resources created.
-
 source ./modules/utils.sh
 source ./modules/config.sh
 

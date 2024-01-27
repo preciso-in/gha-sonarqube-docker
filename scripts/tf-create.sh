@@ -52,8 +52,6 @@ set -e
 # Print command before executing
 set -x
 
-# TODO: Check if node, npm and terraform are installed on terminal
-
 source ./modules/utils.sh
 source ./modules/config.sh
 
@@ -101,6 +99,15 @@ update_gcloud_config
 source ./modules/create-bucket.sh
 create_bucket
 
+source ./modules/enable-compute-api.sh
+enable_compute_api
+
+source ./modules/delete-default-firewall-rules.sh
+delete_default_firewall_rules
+
+source ./modules/delete-default-network.sh
+delete_default_network
+
 # Create TFVars file from input variables
 source ./modules/list-resources-created.sh
 list_resources_created
@@ -109,8 +116,27 @@ source ./modules/update-tf-backend.sh
 update_tf_backend
 
 cd ../terraform-config
+print_yellow "If you are running this on a completely new project, you might need to clear Terraform cache:"
+read -p "Do you want to clear Terraform cache? (y/n) " answer
+if [[ "$answer" == "y" ]]; then
+	rm -rf .terraform/
+	rm .terraform.lock.hcl || {
+		print_green "No .terraform.lock.hcl file found. Continuing..."
+	}
+fi
+
+terraform init --backend-config=backend.hcl || {
+	print_red "Terraform init failed. Perhaps you are not authenticated with project: $PROJECT_ID"
+	print_yellow "Please authenticate to GCP Project: $Project_ID"
+	gcloud auth application-default login
+
+	terraform init --backend-config=backend.hcl || {
+		print_red "Terraform init failed again. Exiting..."
+		exit 1
+	}
+}
+
 terraform fmt
 terraform validate
-terraform init --backend-config=backend.hcl --migrate-state
 
 terraform apply --auto-approve

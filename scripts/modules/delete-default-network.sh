@@ -1,12 +1,12 @@
 delete_default_network() {
 	print_yellow "\nDeleting default network..."
 
-	if ! gcloud compute networks list --format="value(name)"; then
+	if ! gcloud compute networks list --format="value(name)" &>/dev/null; then
 		print_green "No networks exist."
 		return
 	fi
 
-	networks=$(gcloud compute networks list --format="value(name)")
+	networks=$(gcloud compute networks list --format="value(name)") &>/dev/null
 	if ! echo $networks | grep -E "default"; then
 		print_green "No default networks exist."
 		return
@@ -16,15 +16,14 @@ delete_default_network() {
 		response="yes"
 	else
 		echo -e "\n"
-		read -p "Are you sure you want to delete these networks? (yes/no) " response
+		read -p "Are you sure you want to delete the default network? (yes/no) " response
 	fi
 
 	if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-		for network in $default_networks; do
-			gcloud compute networks delete $network --quiet || {
-				print_red "Failed to delete network $network. Please check for errors."
-			}
-		done
+		gcloud compute networks delete default --quiet &>/dev/null || {
+			print_red "Failed to delete network: default. Please check for errors."
+			exit 1
+		}
 		print_green "Default Network deleted."
 		return
 	fi
