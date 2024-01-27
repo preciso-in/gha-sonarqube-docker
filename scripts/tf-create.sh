@@ -50,7 +50,7 @@ cd "$script_dir"
 # Exit on error
 set -e
 # Print command before executing
-set -x
+# set -x
 
 source ./modules/utils.sh
 source ./modules/config.sh

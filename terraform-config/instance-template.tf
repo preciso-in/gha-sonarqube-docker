@@ -1,4 +1,6 @@
 resource "google_compute_instance_template" "jsd_instance_template" {
+  provider = google-beta
+
   name         = var.instance_template_name
   machine_type = "n1-standard-1"
 
@@ -8,6 +10,9 @@ resource "google_compute_instance_template" "jsd_instance_template" {
     provisioning_model          = "SPOT"
     instance_termination_action = "DELETE"
     preemptible                 = true
+    max_run_duration {
+      seconds = 7200
+    }
   }
 
   // Create a new boot disk from an image
