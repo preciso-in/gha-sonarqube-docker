@@ -1,0 +1,14 @@
+name: "Create Sonarqube Docker Workflow"
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Say Hello World
+        run: echo "Hello World"
