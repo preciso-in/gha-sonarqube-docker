@@ -18,3 +18,5 @@ jobs:
           cd scripts/getInputs
           npm install
           npm test
+
+          
