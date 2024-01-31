@@ -4,19 +4,24 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
-  build:
+  sonarscan:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Run jest tests in ./scripts/getInputs
-        run: |
-          cd scripts/getInputs
-          npm install
-          npm test
-
-          
+      - name: sonarqube scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=preciso_ghasd
+            -Dsonar.organization=preciso
+            -Dsonar.python.coverage.reportPaths=coverage.xml
