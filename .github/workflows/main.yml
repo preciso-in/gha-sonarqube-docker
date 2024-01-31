@@ -24,5 +24,4 @@ jobs:
           args: >
             -Dsonar.projectKey=preciso_ghasd
             -Dsonar.organization=preciso
-            -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.sources=.
