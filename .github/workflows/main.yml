@@ -14,12 +14,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: sonarqube scan
-        uses: sonarsource/sonarqube-scan-action@master
+        uses: sonarsource/sonarcloud-github-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           args: >
             -Dsonar.projectKey=preciso_ghasd
             -Dsonar.organization=preciso
+            -Dsonar.python.coverage.reportPaths=coverage.xml
