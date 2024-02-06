@@ -30,4 +30,4 @@ What happens when we run a command on a stopped instance?
 SSH does not work.
 However, other commands might work.
 For ex. check what happens when you use
-$ gcloud compute instances describe $JENKINS_SERVER_NAME
+\> gcloud compute instances describe $JENKINS_SERVER_NAME
