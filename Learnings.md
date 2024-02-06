@@ -1,10 +1,14 @@
+# Learnings
+
+## Billing
+
 All billing costs are from Compute Engine. The avg cost is Rs 24 per day. There are some small networking costs but they have been discounted.
 
 You can save time creating and installing software by stopping instances instead of deleting them.
 However, they will still incur charges for associated resources like Storage, n/w, etc.
 But these charges are very low and much better compared to a running instance.
 
-Boot disks (Zonal, 10GB) are charged at $1 per month. So, it is ok to use them.
+Boot disks (Zonal, 10GB) are charged at $1 per month. So, it is OK to use them.
 
 It is better to use preemptible machines because they will be deleted after a day. It does not matter if the boot disks get used for only a small amount of time.
 

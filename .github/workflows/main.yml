@@ -1,28 +1,54 @@
-name: "Create Sonarqube Docker Workflow"
+---
+name: "Lint Workflow with SuperLinter"
 
 on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - "add-superlinter"
   workflow_dispatch:
 
 jobs:
-  sonarscan:
+  lint:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      statuses: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: sonarqube scan
-        uses: sonarsource/sonarcloud-github-action@master
+      - name: "Static Code Analysis with Super Linter"
+        uses: super-linter/super-linter/slim@v6.0.0
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          DEFAULT_BRANCH: main
+          # ACTIONS_RUNNER_DEBUG: true
+          # To report GitHub Actions status check
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectKey=preciso_ghasd
-            -Dsonar.organization=preciso
-            -Dsonar.python.coverage.reportPaths=coverage.xml
-            -Dsonar.sources=.
+          FILTER_REGEX_EXCLUDE: ".*(vendor|assets).*"
+          USE_FIND_ALGORITHM: true
+          VALIDATE_BASH: true
+          VALIDATE_BASH_EXEC: true
+          VALIDATE_CSS: true
+          VALIDATE_DOCKERFILE_HADOLINT: true
+          VALIDATE_ENV: true
+          VALIDATE_GITHUB_ACTIONS: true
+          VALIDATE_HTML: true
+          VALIDATE_JAVASCRIPT_ES: true
+          VALIDATE_JAVASCRIPT_STANDARD: true
+          VALIDATE_JSON: true
+          VALIDATE_MARKDOWN: true
+          VALIDATE_GITLEAKS: true
+          VALIDATE_TERRAFORM_FMT: true
+          VALIDATE_TERRAFORM_TERRASCAN: true
+          VALIDATE_TERRAFORM_TFLINT: true
+          VALIDATE_TYPESCRIPT_ES: true
+          VALIDATE_TYPESCRIPT_STANDARD: true
+          VALIDATE_YAML: true
+          LINTER_RULES_PATH: "config/lint"
