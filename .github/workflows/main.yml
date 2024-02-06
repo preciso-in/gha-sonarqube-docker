@@ -1,5 +1,5 @@
 ---
-name: "Create Sonarqube Docker Workflow"
+name: "Lint Workflow with SuperLinter"
 
 on:
   pull_request:
@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: write
+      contents: read
       statuses: write
 
     steps:
