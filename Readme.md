@@ -8,12 +8,17 @@
 
 - Super Linter for Static Code Analysis
 
+- Nektos Act for local Development. If local machine is Arm Based SoC like Apple M Machines, you can use GCP Cloud shell to run Act.
+
 ---
 
 ## Features
 
 - [x] Scripts - using Makefile
 - [x] SuperLinter
+  - Use locally with docker. Run "make start_super_linter_docker"
+  - Part of Github Actions Workflow.
+- [x] Use Nektos Act for faster development
 - [ ] Gcloud to create GCP resources
 - [ ] Terraform to create GCP Resources.
 - [ ] Github Variables for Project, Storage Bucket, etc.

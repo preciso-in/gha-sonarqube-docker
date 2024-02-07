@@ -11,3 +11,5 @@ scripts/getInputs/ts-jest.log
 scripts/modules/working/
 
 **/*temp*
+
+super-linter.log

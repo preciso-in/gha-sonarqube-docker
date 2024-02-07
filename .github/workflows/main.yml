@@ -35,7 +35,6 @@ jobs:
           FILTER_REGEX_EXCLUDE: ".*(vendor|assets).*"
           USE_FIND_ALGORITHM: true
           VALIDATE_BASH: true
-          VALIDATE_BASH_EXEC: true
           VALIDATE_CSS: true
           VALIDATE_DOCKERFILE_HADOLINT: true
           VALIDATE_ENV: true
