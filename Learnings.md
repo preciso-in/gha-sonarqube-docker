@@ -31,3 +31,8 @@ SSH does not work.
 However, other commands might work.
 For ex. check what happens when you use
 \> gcloud compute instances describe $JENKINS_SERVER_NAME
+
+Service Accounts in GCP are unlike Storage bucket and project id. They can be reused.
+
+It is important to use project id in gcp. Using name can result in odd errors. TF was giving a permissions error because difference in case between name and id caused a wildgoose chase.
+gg

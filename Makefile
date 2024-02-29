@@ -6,6 +6,8 @@ help:
 	@echo "\nssh_gcloud_shell - SSH into Google Cloud Shell"
 	@echo "\nselect_gcloud_project - Select gcloud project here if not already selected"
 	@echo "\nstart_act_runner - Execute nektos act runner on GCP Cloud shell if local machine is Mac M1. Else run on local machine"
+	@echo "\nopen_github_repo_url - Open github repo url in default browser"
+	@echo "\nempty_commit - Create an empty commit with message 'Empty commit'"
 
 .PHONY: start_super_linter_docker
 start_super_linter_docker:
@@ -35,3 +37,12 @@ select_gcloud_project:
 start_act_runner:
 	@echo "Runs on GCP Cloud Shell if local machine is Mac M1."
 	@sh scripts/act-runner.sh
+
+.PHONY: open_github_repo_url
+open_github_repo_url:
+	@open -a "Google Chrome" "https://github.com/preciso-in/gha-sonarqube-docker"
+
+.PHONY: empty_commit
+empty_commit:
+	@echo "This command will fail. Edit it to add story id 'GASD' in commit message"
+	git commit --allow-empty -m "WIP Empty commit to trigger GH Action"
