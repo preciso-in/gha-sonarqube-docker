@@ -2,13 +2,13 @@
 
 [![Create Sonarqube Docker Workflow](https://github.com/preciso-in/gha-sonarqube-docker/actions/workflows/main.yml/badge.svg)](https://github.com/preciso-in/gha-sonarqube-docker/actions/workflows/main.yml)
 
-- Will Deploy a simple Website with JS, JQuery and Animations on GCP VM
+- Will Deploy a simple Website with JS, JQuery and Animations on `GCP VM`
 
-- Github Actions for CI/CD,
+- `Github Actions` for CI/CD,
 
-- Super Linter for Static Code Analysis
+- `Super Linter` for Static Code Analysis
 
-- Nektos Act for local Development. If local machine is Arm Based SoC like Apple M Machines, you can use GCP Cloud shell to run Act.
+- `Nektos Act` for local Development. If local machine is Arm Based SoC like Apple M Machines, you can use GCP Cloud shell to run Act.
 
 ---
 
