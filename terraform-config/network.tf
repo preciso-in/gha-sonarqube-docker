@@ -42,42 +42,42 @@ resource "google_compute_subnetwork" "subnetwork" {
 #   }
 # }
 
-# # resource "google_compute_firewall" "allow_rdp" {
-# #   name          = "allow-rdp"
-# #   direction     = "INGRESS"
-# #   priority      = 65534
-# #   network       = google_compute_network.vpc_network.id
-# #   source_ranges = ["0.0.0.0/0"]
+# resource "google_compute_firewall" "allow_rdp" {
+#   name          = "allow-rdp"
+#   direction     = "INGRESS"
+#   priority      = 65534
+#   network       = google_compute_network.vpc_network.id
+#   source_ranges = ["0.0.0.0/0"]
 
-# #   allow {
-# #     protocol = "tcp"
-# #     ports    = ["3389"]
-# #   }
-# # }
+#   allow {
+#     protocol = "tcp"
+#     ports    = ["3389"]
+#   }
+# }
 
-# # resource "google_compute_firewall" "allow_ssh" {
-# #   name          = "allow-ssh"
-# #   direction     = "INGRESS"
-# #   priority      = 65534
-# #   network       = google_compute_network.vpc_network.id
-# #   source_ranges = ["0.0.0.0/0"]
+# resource "google_compute_firewall" "allow_ssh" {
+#   name          = "allow-ssh"
+#   direction     = "INGRESS"
+#   priority      = 65534
+#   network       = google_compute_network.vpc_network.id
+#   source_ranges = ["0.0.0.0/0"]
 
-# #   allow {
-# #     protocol = "tcp"
-# #     ports    = ["22"]
-# #   }
-# # }
+#   allow {
+#     protocol = "tcp"
+#     ports    = ["22"]
+#   }
+# }
 
-# # resource "google_compute_firewall" "allow_sonarqube" {
-# #   name          = "allow-sonarqube"
-# #   direction     = "INGRESS"
-# #   priority      = 1000
-# #   network       = google_compute_network.vpc_network.id
-# #   source_ranges = ["0.0.0.0/0"]
+# resource "google_compute_firewall" "allow_sonarqube" {
+#   name          = "allow-sonarqube"
+#   direction     = "INGRESS"
+#   priority      = 1000
+#   network       = google_compute_network.vpc_network.id
+#   source_ranges = ["0.0.0.0/0"]
 
-# #   allow {
-# #     protocol = "tcp"
-# #     ports    = ["9000"]
-# #   }
-# #   target_tags = [var.sonarqube_network_tag]
-# # }
+#   allow {
+#     protocol = "tcp"
+#     ports    = ["9000"]
+#   }
+#   target_tags = [var.sonarqube_network_tag]
+# }
