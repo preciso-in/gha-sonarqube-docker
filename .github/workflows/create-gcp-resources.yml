@@ -3,10 +3,10 @@ name: "Deploy GCP Resources"
 
 on:
   push:
-    # branches:
-    #   - main
-    # paths:
-    #   - "terraform-config/**"
+    branches:
+      - main
+    paths:
+      - "terraform-config/**"
 
 env:
   TF_WORKSPACE: "gha-sq-docker"
