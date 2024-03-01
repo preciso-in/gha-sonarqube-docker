@@ -2,6 +2,7 @@ resource "google_compute_instance" "sonar_scanner" {
   name         = "code-scanner"
   zone         = "${var.region}-a"
   machine_type = "custom-1-5120"
+  description  = "SonarQube Scanner Instance"
 
   boot_disk {
     initialize_params {
