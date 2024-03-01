@@ -10,6 +10,8 @@ on:
 env:
   TF_WORKSPACE: "gha-sq-docker"
   CONFIG_DIRECTORY: "./terraform-config"
+  TF_CLOUD_ORGANIZATION: "preciso"
+  TF_API_TOKEN: "${{ secrets.TFCLOUD }}"
 
 jobs:
   terraform:
