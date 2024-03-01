@@ -9,7 +9,7 @@ resource "google_compute_instance" "sonar_scanner" {
     }
   }
 
-  tags = ["${var.sonarqube_network_tag}"]
+  tags = [var.sonarqube_network_tag]
 
   network_interface {
     network    = var.network_name

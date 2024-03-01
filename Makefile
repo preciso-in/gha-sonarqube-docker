@@ -35,3 +35,7 @@ select_gcloud_project:
 start_act_runner:
 	@echo "Runs on GCP Cloud Shell if local machine is Mac M1."
 	@sh scripts/act-runner.sh
+
+.PHONY: open_github_repo_url
+open_github_repo_url:
+	@open -a "Google Chrome" "https://github.com/preciso-in/gha-sonarqube-docker"

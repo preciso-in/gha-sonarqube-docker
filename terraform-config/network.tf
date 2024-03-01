@@ -79,5 +79,5 @@ resource "google_compute_firewall" "allow_sonarqube" {
     protocol = "tcp"
     ports    = ["9000"]
   }
-  target_tags = ["${var.sonarqube_network_tag}"]
+  target_tags = [var.sonarqube_network_tag]
 }
