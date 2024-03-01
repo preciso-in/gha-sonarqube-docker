@@ -5,7 +5,6 @@ on:
   pull_request:
     paths:
       - "terraform-config/**"
-  push:
 
 env:
   TF_WORKSPACE: "gha-sq-docker"
