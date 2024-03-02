@@ -19,4 +19,35 @@ resource "google_compute_instance" "sonar_scanner" {
     # Empty Access Config block associates instance with an ephemeral external IP
     access_config {}
   }
+
+  metadata_startup_script = <<-EOF
+        #!/bin/bash
+        apt-get update -y
+        sudo apt install openjdk-17-jre unzip -y
+        cd /opt
+        wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-10.2.0.77647.zip
+        unzip sonarqube-10.2.0.77647.zip
+        rm sonarqube-10.2.0.77647.zip
+        mv sonarqube-10.2.0.77647 sonarqube
+        sudo useradd sonar
+        sudo groupadd sonar
+        sudo chown -R sonar:sonar sonarqube
+        echo "RUN_AS_USER=sonar" >> /opt/sonarqube/bin/linux-x86-64/sonar.sh
+        cat >> /etc/systemd/system/sonar.service <<EOF1
+[Unit] 
+Description=SonarQube service 
+After=syslog.target network.target 
+[Service] 
+Type=forking 
+ExecStart=/opt/sonarqube/bin/linux-x86-64/sonar.sh start 
+ExecStop=/opt/sonarqube/bin/linux-x86-64/sonar.sh stop 
+User=sonar 
+Group=sonar 
+Restart=always 
+[Install] 
+WantedBy=multi-user.target
+EOF1
+        sudo systemctl daemon-reload
+        sudo systemctl enable --now sonar
+        EOF
 }
