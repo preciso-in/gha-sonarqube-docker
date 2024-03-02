@@ -46,9 +46,16 @@ jobs:
           VALIDATE_MARKDOWN: true
           VALIDATE_GITLEAKS: true
           VALIDATE_TERRAFORM_FMT: true
-          VALIDATE_TERRAFORM_TERRASCAN: true
+          # Ignoring Terrascan (need to keep SonarServer:9000 open for GHA to access. Rule cannot be ignored in Superlinter.)
+          # Can be solved by using a self-hosted runner (having fixed IP Address) with access to the SonarQube server in an enterprise environment.
+          # VALIDATE_TERRAFORM_TERRASCAN: true
           VALIDATE_TERRAFORM_TFLINT: true
           VALIDATE_TYPESCRIPT_ES: true
           VALIDATE_TYPESCRIPT_STANDARD: true
           VALIDATE_YAML: true
           LINTER_RULES_PATH: "config/lint"
+
+      - uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{vars.SONAR_HOST_URL}}
