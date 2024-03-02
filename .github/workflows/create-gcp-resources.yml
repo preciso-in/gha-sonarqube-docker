@@ -7,7 +7,6 @@ on:
       - main
     paths:
       - "terraform-config/**"
-  pull_request:
 
 env:
   TF_WORKSPACE: "gha-sq-docker"
