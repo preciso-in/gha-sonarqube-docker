@@ -11,5 +11,6 @@ scripts/getInputs/ts-jest.log
 scripts/modules/working/
 
 **/*temp*
+**/*nextStory*
 
 super-linter.log
