@@ -24,7 +24,7 @@ resource "google_compute_instance" "sonar_scanner" {
         #!/bin/bash
         apt-get update -y
         sudo apt install openjdk-17-jre unzip -y
-        cd /usr/local
+        cd /opt
         wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-10.2.0.77647.zip
         unzip sonarqube-10.2.0.77647.zip
         rm sonarqube-10.2.0.77647.zip
@@ -32,7 +32,7 @@ resource "google_compute_instance" "sonar_scanner" {
         sudo useradd sonar
         sudo groupadd sonar
         sudo chown -R sonar:sonar sonarqube
-        echo "RUN_AS_USER=sonar" >> /usr/local/sonarqube/bin/linux-x86-64/sonar.sh
+        echo "RUN_AS_USER=sonar" >> /opt/sonarqube/bin/linux-x86-64/sonar.sh
         cat >> /etc/systemd/system/sonar.service <<EOF1
 [Unit] 
 Description=SonarQube service 
