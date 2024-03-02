@@ -19,4 +19,15 @@ resource "google_compute_instance" "sonar_scanner" {
     # Empty Access Config block associates instance with an ephemeral external IP
     access_config {}
   }
+
+  metadata_startup_script = <<-EOF
+        #!/bin/bash
+        apt-get update -y
+        sudo apt install openjdk-17-jre unzip -y
+        cd /usr/local
+        wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-10.2.0.77647.zip
+        unzip sonarqube-10.2.0.77647.zip
+        rm sonarqube-10.2.0.77647.zip
+        chown neellearngcp -R sonarqube-10.2.0.77647/
+        EOF
 }

@@ -10,7 +10,6 @@ resource "google_compute_subnetwork" "subnetwork" {
   network       = google_compute_network.vpc_network.id
 }
 
-
 resource "google_compute_firewall" "allow_ssh" {
   name      = "allow-ssh"
   direction = "INGRESS"
@@ -24,4 +23,18 @@ resource "google_compute_firewall" "allow_ssh" {
     protocol = "tcp"
     ports    = ["22"]
   }
+}
+
+resource "google_compute_firewall" "allow_sonarqube" {
+  name          = "allow-sonarqube"
+  direction     = "INGRESS"
+  priority      = 1000
+  network       = google_compute_network.vpc_network.id
+  source_ranges = ["0.0.0.0/0"]
+
+  allow {
+    protocol = "tcp"
+    ports    = ["9000"]
+  }
+  target_tags = [var.sonarqube_network_tag]
 }
